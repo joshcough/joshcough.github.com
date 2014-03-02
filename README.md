@@ -1,4 +1,4 @@
 joshcough.com
 ====================
 
-my home page.
+My sweet home page!
