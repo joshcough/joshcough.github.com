@@ -1,4 +1,4 @@
-joshcough.github.com
+joshcough.com
 ====================
 
 my home page.
