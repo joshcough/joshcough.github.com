@@ -7,9 +7,10 @@
     optimize: "none",
 
     paths: {
-        "jquery": "require-jquery"
+        "jquery": "require-jquery",
+        "highcharts": "highcharts",
+        "highcharts": "highcharts-more"
     },
-
     modules: [
         //Optimize the require-jquery.js file by applying any minification
         //that is desired via the optimize: setting above.

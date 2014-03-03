@@ -1,7 +1,14 @@
-require(["jquery", "goo"], function($, goo) {
-    //the jquery.alpha.js and jquery.beta.js plugins have been loaded.
+require(["jquery", "github", "chart"], function($, github, chart) {
     $(function() {
-        //$('body').text(goo.goobers);
-        goo.getCommitMessages("joshcough", "L5-Haskell");
+        /*
+        github.getCommitMessages("joshcough", "L5-Haskell", function (res) {
+            $.each(res, function(i,el) {
+                $("#result").append("<li>" + el["commit"]["message"] + "</li>");
+            });
+        });
+        */
+        github.getCommitActivity("joshcough", "L5-Haskell", function (res) {
+          chart.mkChart('#stats', $.map(res, function(r){ return r["days"]; }));
+        });
     });
 });
