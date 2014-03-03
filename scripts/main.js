@@ -7,8 +7,7 @@ require(["jquery", "github", "chart"], function($, github, chart) {
             });
         });
         */
-        github.getCommitActivity("joshcough", "L5-Haskell", function (res) {
-          chart.mkChart('#stats', $.map(res, function(r){ return r["days"]; }));
-        });
+        chart.mkCommitChart("#L5HaskellCommits",     "joshcough", "L5-Haskell");
+        chart.mkCommitChart("#HaskellStarterCommits", "joshcough", "HaskellStarter");
     });
 });
