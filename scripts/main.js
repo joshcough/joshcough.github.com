@@ -1,4 +1,4 @@
-require(["jquery", "jquery-ui", "datatables", "rss"], function($, ui, datatables, rss) {
+require(["jquery", "rss"], function($, rss) {
     $(function() {
         //$( "#accordion" ).accordion();
         rss.table(

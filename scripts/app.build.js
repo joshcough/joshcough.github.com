@@ -8,7 +8,6 @@
 
     paths: {
         "jquery": "require-jquery",
-        "jquery-ui": "jquery-ui",
         "datatables": "datatables",
         "highcharts": "highcharts",
         "highcharts": "highcharts-more"
