@@ -4,9 +4,25 @@
         <title>Josh Cough's Homepage</title>
         <!-- This is a special version of jQuery with RequireJS built-in -->
         <script data-main="scripts/main" src="scripts/require-jquery.js"></script>
+        <style type="text/css">
+          <!--
+          @import url("styles/table-styles.css");
+          -->
+        </style>
     </head>
     <body>
       <div id="L5HaskellCommits" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
       <div id="HaskellStarterCommits" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+      <div id="reddit">
+        <table id="reddit-table" class="rounded-corner">
+          <thead>
+            <tr>
+              <th scope="col" class="rounded-left"></th>
+              <th scope="col">Reddit</th>
+              <th scope="col" class="rounded-right"></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table></div>
     </body>
 </html>
