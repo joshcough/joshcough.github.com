@@ -1,4 +1,4 @@
-define(["jquery"], function($){
+define(["jquery", "datatables"], function($, datatables){
 
   var converterUrl = 'https://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=10&callback=?&q='
 
@@ -23,10 +23,10 @@ define(["jquery"], function($){
     return "<a href='" + href + "'>" + text + "</a>";
   }
 
-  var feedToTable = function(url, title, cont){
+  var feedToTable = function(url, id, title, cont){
     var mkTable = function(title, body){
-      var it = 
-       ["<table class='rounded-corner'>",
+      /*var it = 
+       ["<table id='"+id+"-table"+"' class='rounded-corner'>",
         "  <thead>",
         "    <tr>",
         "      <th scope='col' class='rounded-left'></th>",
@@ -40,6 +40,18 @@ define(["jquery"], function($){
         "    <td/>",
         "    <td class='rounded-foot-right'/>",
         "  </tfoot>",
+        "</table>"
+       ].join('\n');*/
+      var it = 
+       ["<table id='"+id+"-table"+"'>",
+        "  <thead>",
+        "    <tr>",
+        "      <th></th>",
+        "      <th>"+title+"</th>",
+        "      <th></th>",
+        "    </tr>",
+        "  </thead>",
+        "  <tbody>"+body+"</tbody>",
         "</table>"
        ].join('\n');
       return it;
@@ -55,7 +67,10 @@ define(["jquery"], function($){
   }
 
   var rssTable = function(url, title, id){
-    feedToTable(url, title, function(table){ $(id).html(table); });
+    feedToTable(url, id, title, function(table){ 
+      $("#" + id).html(table); 
+      $("#" + id + "-table").dataTable({"bJQueryUI": true});
+    });
   } 
 
   return {
