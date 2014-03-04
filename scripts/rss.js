@@ -48,9 +48,12 @@ define(["jquery"], function($){
     });
   }
 
+  var rssTable = function(url, title, id){
+    feedToTable(url, title, function(table){ $(id).html(table); });
+  } 
+
   return {
     parseRSS: parseRSS,
-    getTitlesAndUrls: getTitlesAndUrls,
-    feedToTable: feedToTable
+    table: rssTable
   }
 })
