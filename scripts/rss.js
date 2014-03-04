@@ -41,7 +41,13 @@ define(["jquery", "datatables"], function($, datatables){
   var rssTable = function(url, title, id){
     feedToTable(url, id, title, function(table){ 
       $("#" + id).html(table); 
-      $("#" + id + "-table").dataTable();
+      $("#" + id + "-table").dataTable({
+        bPaginate: false,
+        bSort: false,
+        bFilter: false,
+        bInfo: false,
+        "sScrollY": "200px",
+      });
     });
   } 
 
