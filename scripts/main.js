@@ -13,6 +13,9 @@ require(["jquery", "github", "chart", "rss"], function($, github, chart, rss) {
         rss.getTitlesAsTable("http://www.reddit.com/.rss", function(res){
           $("#reddit-table tbody").html(res);
         });
+        rss.getTitlesAsTable("http://feeds.theonion.com/theonion/daily", function(res){
+          $("#onion-table tbody").html(res);
+        });
 
     });
 });
