@@ -35,10 +35,16 @@ define(["jquery"], function($){
         "    </tr>",
         "  </thead>",
         "  <tbody>"+body+"</tbody>",
+        "  <tfoot>",
+        "    <td class='rounded-foot-left'/>",
+        "    <td/>",
+        "    <td class='rounded-foot-right'/>",
+        "  </tfoot>",
         "</table>"
        ].join('\n');
       return it;
     }
+
     getTitlesAndUrls(url, function(tus){
       var tbl_body = "";
       $.each(tus, function(i, tu) {

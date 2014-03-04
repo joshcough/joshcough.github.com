@@ -8,12 +8,17 @@ body
 	line-height: 1.6em;
 }
 
+.rss
+{
+        vertical-align: top; 
+        width: 33%
+}
+
 .rounded-corner
 {
 	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
 	font-size: 12px;
-	margin: 45px;
-	width: 480px;
+	margin: 5px;
 	text-align: left;
 	border-collapse: collapse;
 }
