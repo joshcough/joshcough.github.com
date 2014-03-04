@@ -23,19 +23,34 @@ define(["jquery"], function($){
     return "<a href='" + href + "'>" + text + "</a>";
   }
 
-  var getTitlesAsTable = function(url, cont){
+  var feedToTable = function(url, title, cont){
+    var mkTable = function(title, body){
+      var it = 
+       ["<table class='rounded-corner'>",
+        "  <thead>",
+        "    <tr>",
+        "      <th scope='col' class='rounded-left'></th>",
+        "      <th scope='col'>"+title+"</th>",
+        "      <th scope='col' class='rounded-right'></th>",
+        "    </tr>",
+        "  </thead>",
+        "  <tbody>"+body+"</tbody>",
+        "</table>"
+       ].join('\n');
+      return it;
+    }
     getTitlesAndUrls(url, function(tus){
       var tbl_body = "";
       $.each(tus, function(i, tu) {
         tbl_body += "<tr><td/><td>"+mkLink(tu["title"], tu["url"])+"</td><td/></tr>";                 
       });
-      cont(tbl_body);
+      cont(mkTable(title, tbl_body));
     });
   }
 
   return {
     parseRSS: parseRSS,
     getTitlesAndUrls: getTitlesAndUrls,
-    getTitlesAsTable: getTitlesAsTable
+    feedToTable: feedToTable
   }
 })
