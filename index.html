@@ -6,19 +6,31 @@
         <script data-main="scripts/main" src="scripts/require-jquery.js"></script>
         <link href="styles/index.css" rel="stylesheet">
         <link href="styles/jquery.dataTables.css" rel="stylesheet">
-        <!-- link rel="shortcut icon" href="images/favicon.ico" -->
+        <link rel="shortcut icon" href="images/black.jpeg">
     </head>
     <body id="index">
       <h1 style="text-align:center">Josh Cough's Homepage</h1>
       <div id="tables">
         <table>
           <tr>
-            <td class="rss"><div id="reddit-haskell" style="border:1px"/></td>
-            <td class="rss"><div id="reddit-program"/></td>
-            <td class="rss"><div id="onion-table"   /></td>
+            <td class="rss"><div id="reddit-haskell" class="rssdiv"/></td>
+            <td class="rss"><div id="reddit-program" class="rssdiv"/></td>
+            <td class="rss"><div id="onion-table"    class="rssdiv"/></td>
           </tr>
         </table>
       </div>
       <a href="./github.html">My GitHub Info</a>
+
+      <form method="get" action="http://www.google.com/search"> 
+        <div style="padding:4px;width:20em;">
+          <table border="0" cellpadding="0"> 
+            <tr>
+              <td><input type="text" name="q" size="50" maxlength="255" value=""/></td>
+              <td><input type="submit" value="Google"/></td>
+            </tr>
+          </table> 
+        </div>
+      </form>
+
     </body>
 </html>

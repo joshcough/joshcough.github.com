@@ -30,7 +30,7 @@ define(["jquery", "datatables"], function($, datatables){
       });
       var table =  
        ["<table id='"+id+"-table"+"'>",
-        "  <thead><tr><th>"+title+"</th></tr></thead>",
+        "  <thead><tr><th class='rssheader'>"+title+"</th></tr></thead>",
         "  <tbody>"+tbl_body+"</tbody>",
         "</table>"
        ].join('\n');

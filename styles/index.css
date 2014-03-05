@@ -1,11 +1,20 @@
-
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * General page setup
- */
 .rss
 {
   vertical-align: top; 
   width: 33%
+}
+
+.rssdiv
+{
+  border-style:solid;
+  border-width:1px;
+  border-color:gray;
+}
+
+.rssheader
+{
+  background-color: black;
+  color: white;
 }
 
 #index {
@@ -13,7 +22,8 @@
 	margin: 0;
 	padding: 0;
 	color: #333;
-	background-color: #fff;
+	/*background-color: #fff;*/
+	background-color: black;
 }
 
 
@@ -81,6 +91,11 @@
 	text-decoration: none;
 }
 
+#index a:visited {
+	color: gray;
+	text-decoration: none;
+}
+
 #index a:hover {
 	text-decoration: underline;
 }
@@ -95,20 +110,6 @@
 
 .css_left {
 	float: left;
-}
-
-.demo_links {
-	float: left;
-	width: 50%;
-	margin-bottom: 1em;
-}
-
-#demo_info {
-	padding: 5px;
-	border: 1px solid #B0BED9;
-	height: 100px;
-	width: 100%;
-	overflow: auto;
 }
 
 #index code {
