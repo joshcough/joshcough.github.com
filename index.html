@@ -1,36 +1,72 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Josh Cough's Homepage</title>
-        <!-- This is a special version of jQuery with RequireJS built-in -->
-        <script data-main="scripts/main" src="scripts/require-jquery.js"></script>
-        <link href="styles/index.css" rel="stylesheet">
-        <link href="styles/jquery.dataTables.css" rel="stylesheet">
-        <link rel="shortcut icon" href="images/black.jpeg">
-    </head>
-    <body id="index">
-      <h1 style="text-align:center">Josh Cough's Homepage</h1>
-      <div id="tables">
-        <table>
-          <tr>
-            <td class="rss"><div id="reddit-haskell" class="rssdiv"/></td>
-            <td class="rss"><div id="reddit-program" class="rssdiv"/></td>
-            <td class="rss"><div id="onion-table"    class="rssdiv"/></td>
-          </tr>
-        </table>
-      </div>
-      <a href="./github.html">My GitHub Info</a>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" >
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+	<title>Josh Cough's Homepage</title>
+<link rel="stylesheet" type="text/css" media="screen" href="./styles/style.css" />
+</head>
+<body>
 
-      <form method="get" action="http://www.google.com/search"> 
-        <div style="padding:4px;width:20em;">
-          <table border="0" cellpadding="0"> 
-            <tr>
-              <td><input type="text" name="q" size="50" maxlength="255" value=""/></td>
-              <td><input type="submit" value="Google"/></td>
-            </tr>
-          </table> 
-        </div>
-      </form>
+<div id="container">
+	<div id="intro">
+		<div id="pageHeader" style="padding: 20px 0 0 50px;">
+			<h1><span>joshcough.com</span></h1>
+		</div>
 
-    </body>
+		<div id="preamble">
+			<h3><span>Welcome to this glorious page</span></h3>
+			<p class="p1"><span>Hi there. My name is Josh Cough and I am a functional programmer who enjoys teaching programming, and who occassionally dabbles in musical theater on the side. </span></p>
+			<p class="p1"><span>As far as programming goes, I'm very passionate about the Haskell programming language, and I'm currenly running Boston Haskell (which you can link to on the right). I'm probably best known for my work in Scala though, which I used to write about extensively on my blog. I've also given a number of talks at meetups and conferenes, and I'm in the process of linking to them on the right. Bear with me as that happens.</span></p>
+			<p class="p1"><span>Besides Haskell and Scala, I write code in just about every language, but here are a few of my favorites and/or languages on my radar: Coq, Idris, Agda, Racket, Clojure, Ermine (which I helped develop), F#, and more.</span></p>
+			<p class="p1"><span>I've had major roles in three musicals at the MIT Musical Theater Guild. Those shows are also linked to on the right.</span></p>
+		</div>
+	</div>
+
+	<div id="footer"></div>
+	
+	<div id="linkList">
+		<div id="linkList2">
+			<div id="lselect">
+				<h3 class="select"><span>Links:</span></h3>
+				<ul>
+					<li><a href="./index.html">Home</a></li>
+					<li><a href="https://www.github.com/joshcough">My Github</a></li>
+                                        <li><a href="./github.html">My GitHub Stats</a></li>
+					<li><a href="http://www.meetup.com/Boston-Haskell/">Boston Haskell</a></li>
+					<li><a href="http://jackcoughonsoftware.blogspot.com/">Blog</a></li>
+					<li><a href="mailto:josh@joshcough.com">Contact</a></li>
+				</ul>
+			</div>
+
+			<div id="lselect">
+				<h3 class="select"><span>Theater Roles</span></h3>
+				<ul>
+					<li><a href="http://web.mit.edu/~mtg/www/2013/FAL/ProdStaff.html">Dr. Frederick Frankenstein in Young Frankenstein - Fall 2013</a></li>
+					<li><a href="http://web.mit.edu/~mtg/www/2013/SUM/ProdStaff.html">Brian in Avenue Q - Summer 2013</a></li>
+					<li><a href="http://web.mit.edu/~mtg/www/2013/SPR/ProdStaff.html">Glenn Guglia in The Wedding Singer - Spring 2013</a></li>
+				</ul>
+			</div>
+
+			<div id="lselect">
+				<h3 class="archives"><span>Talks</span></h3>
+				<ul>
+					<li><a href="./talks/codeworld-slides.html">CodeWorld.info</a></li>
+					<li><a href="http://www.meetup.com/Boston-Haskell/events/166967072/">Getting a Haskell Project Started @ Boston Haskell</a></li>
+
+					<li><a href="">Introduction to Ermine @ nescala 3/14</a></li>
+					<li><a href="">Testing in Haskell with Tasty and TestFramework @ Boston Haskell 12/13</a></li>
+					<li><a href="">Making Java APIs usable with Scala @ New York Scala Enthusiasts 1/13</a></li>
+					<li><a href="">Making Java APIs usable with Scala @ Boston Area Scala Enthusiasts 10/12</a></li>
+					<li><a href="">Tail Call Optimization @ Chicago Area Scala Enthusiasts 7/11</a></li>
+					<li><a href="">ScalaTest/SBT/IntelliJ @ Chicago Area Scala Enthusiasts 10/09</a></li>
+					<li><a href="">Testing in Scala @ New York Scala Enthusiasts 4/09</a></li>
+				</ul>
+			</div>
+
+		</div>
+  </div>
+
+</div>
+</body>
 </html>

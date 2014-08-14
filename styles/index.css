@@ -8,22 +8,23 @@
 {
   border-style:solid;
   border-width:1px;
-  border-color:gray;
+  border-color:black;
 }
 
 .rssheader
 {
   background-color: black;
   color: white;
+  width: 100%;
 }
 
 #index {
 	font: 80%/1.45em "Lucida Grande", Verdana, Arial, Helvetica, sans-serif;
 	margin: 0;
 	padding: 0;
-	color: #333;
+	color: #gray;
 	/*background-color: #fff;*/
-	background-color: black;
+	background-color: gray;
 }
 
 
@@ -73,7 +74,7 @@
 	font-size: 1.3em;
 	font-weight: normal;
 	line-height: 1.6em;
-	color: #4E6CA3;
+	color: black;
 	border-bottom: 1px solid #B0BED9;
 	clear: both;
 }
@@ -87,12 +88,12 @@
 }
 
 #index a {
-	color: #0063DC;
+	color: blue;
 	text-decoration: none;
 }
 
 #index a:visited {
-	color: gray;
+	color: light blue;
 	text-decoration: none;
 }
 
