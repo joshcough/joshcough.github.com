@@ -8,8 +8,9 @@
 
 		<link rel="stylesheet" href="../reveal/css/reveal.css">
 		<link rel="stylesheet" href="../reveal/css/theme/default.css" id="theme">
-
-        <link rel="stylesheet" href="../reveal/lib/css/zenburn.css">
+                <link rel="stylesheet" href="../reveal/lib/css/zenburn.css">
+                <script src="../scripts/highlight.pack.js"></script>
+                <script>hljs.initHighlightingOnLoad();</script>
 	</head>
 
 	<body>
@@ -21,165 +22,145 @@
                 <!-- Slides are separated by three dashes (quick 'n dirty regular expression) -->
                 <section data-markdown data-separator="---">
                     <script type="text/template">
-                        # CodeWorld.info
-                        [Josh Cough](http://joshcough.com/) / [@joshcough](http://twitter.com/joshcough)
+# CodeWorld.info
+[Josh Cough](http://joshcough.com/) / [@joshcough](http://twitter.com/joshcough)
+---
+## Maze Generator: Imports
+<pre><code class="haskell" data-trim>
+{-# LANGUAGE NoImplicitPrelude #-}
+import HaskellPrelude
+import CodeWorld
+import Data.Set (Set)
+import qualified Data.Set as Set
+</code></pre>
 ---
 ## Maze Generator: interationOf
-```haskell
+<pre><code class="haskell" data-trim>
 main = interactionOf(createWorld, fst, event, drawWorld)
-```
+</code></pre>
 ---
 ## World Creation
-```haskell
-data World = World { loc :: Point, maze :: Grid }
-createWorld rs = World { loc = (0, 0), maze = buildMaze 10 10 rs }
-```
+<pre><code class="haskell" data-trim>
+data World = World { loc :: Point, maze :: Maze }
+
+type RandomNumbers = [Number]
+
+createWorld :: RandomNumbers -> World
+createWorld rs = World { loc = (0, 0), maze = buildMaze 20 20 rs }
+</code></pre>
 ---
 ## World Creation: Helpful Types
-```haskell
+<pre><code class="haskell" data-trim>
 type Door = (Point, Point)
+
+reverseDoor :: Door -> Door
+reverseDoor ((fx,fy),(tx,ty)) = ((tx,ty),(fx,fy))
 
 type Direction = Vector
 
-directions = [north, south, east, west]
-north = (0, 1); south = ( 0, -1)
-east  = (1, 0); west  = (-1,  0)
+directions = Set.fromList [up, down, right, left]
+up = (0, 1); down = (0, -1); right = (1, 0); left = (-1, 0)
 
 addDirToPoint :: Point -> Direction -> Point
-addDirToPoint (px, py) (dx, dy) = (px + dx, py + dy)
-```
+addDirToPoint p d = addVectors (p, d)
+</code></pre>
 ---
-## World Creation: More Helpful Types
-```Haskell
-type RandomSupply = [Number]
-
-type Set a = [a]
-addToSet :: Set a -> a -> Set a
-addToSet s a = nub (a : s)
-```
----
-## World Creation: Grid
-```haskell
-data Grid = Grid {
+## Maze
+<pre><code class="haskell" data-trim>
+data Maze = Maze {
   width   :: Number,    height :: Number,
   visited :: Set Point, doors  :: Set Door }
-```
+
+emptyMaze w h =
+  Maze w h Set.empty (Set.fromList $ entranceDoor : exitDoor : [])
+  where
+    entranceDoor   = ((-1,0), (0,0))
+    exitDoor       = ((w-1,h-1), (w,h-1))
+</code></pre>
 ---
-## Grid Operations
-```haskell
-addDoor :: Grid -> Door -> Grid
-addDoor g d = g { doors = addToSet (doors g) d }
+## Maze Operations
+<pre><code class="haskell" data-trim>
+addDoor :: Maze -> Door -> Maze
+addDoor g d = g { doors = Set.insert d (doors g) }
 
 containsDoor :: Set Door -> Door -> Bool
-containsDoor ds ((fx,fy),(tx,ty)) = any (ds, match) where
-  match ((fx',fy'),(tx',ty')) =
-    (fx == fx' && fy == fy' && tx == tx' && ty == ty') ||
-    (fx == tx' && fy == ty' && tx == fx' && ty == fy')
-```
----
-## Grid Operations Continued
-```haskell    
-markVisitedAt :: Grid -> Point -> Grid
-markVisitedAt g p = g { visited = addToSet (visited g) p }
+containsDoor ds d = Set.member d ds || Set.member (reverseDoor d) ds
 
-isVisitedAt :: Grid -> Point -> Bool
-isVisitedAt g p = isMember (visited g, p)
-```
+markVisitedAt :: Maze -> Point -> Maze
+markVisitedAt g p = g { visited = Set.insert p (visited g) }
+
+isVisitedAt :: Maze -> Point -> Bool
+isVisitedAt g p = Set.member p (visited g)
+</code></pre>
 ---
-## Grid Operations Continued
-```haskell
-neighbors :: Grid -> Point -> Set Point
-neighbors g p = filter (map (directions, addDirToPoint p), inbounds) where
+## Maze Operations Continued
+<pre><code class="haskell" data-trim>
+neighbors :: Maze -> Point -> Set Point
+neighbors g p =
+  Set.filter inbounds (Set.map (addDirToPoint p) directions) where
   inbounds (x,y) = x >= 0 && x < width g && y >= 0 && y < height g
 
-unvisitedNeighbors :: Grid -> Point -> Set Point
-unvisitedNeighbors g p = filter (neighbors g p, (not . isVisitedAt g))
-```
+unvisitedNeighbors :: Maze -> Point -> Set Point
+unvisitedNeighbors g p = Set.filter (not . isVisitedAt g) (neighbors g p)
+</code></pre>
 ---
 ## Maze Generation
-```haskell
-buildMaze :: Number -> Number -> RandomSupply -> Grid
-buildMaze w h randoms = buildImpl exitPoint startGrid randoms where 
-  startGrid = (Grid w h [] (entranceDoor : exitDoor : []))
-  exitPoint = (w - 1, h - 1)
-  entranceDoor = ((-1,0), (0,0))
-  exitDoor     = ((w-1,h-1), (w,h-1))  
-  buildImpl :: Point -> Grid -> RandomSupply -> Grid
-  buildImpl current g rs = foldl f newGrid nbors where
-    newGrid = markVisitedAt g current
-    (nbors, randoms') = shuffle (unvisitedNeighbors newGrid current) rs
+<pre><code class="haskell" data-trim>
+buildMaze :: Number -> Number -> RandomNumbers -> Maze
+buildMaze w h randoms = go (0,0) (emptyMaze w h) randoms where
+  go :: Point -> Maze -> RandomNumbers -> Maze
+  go current g rs = foldl f newMaze shuffledNbors where
+    newMaze = markVisitedAt g current
+    nbors = Set.toList $ unvisitedNeighbors newMaze current
+    shuffledNbors = shuffle (nbors, head rs)
     f gacc n = if isVisitedAt gacc n then gacc else recur where
       newG  = addDoor gacc (current, n)
-      recur = buildImpl n newG randoms'
-```
+      recur = go n newG (tail rs)
+</code></pre>
 ---
 ## Events
-```haskell
-event(w, KeyPress "Up")    = move north w
-event(w, KeyPress "Down")  = move south w
-event(w, KeyPress "Left")  = move west  w
-event(w, KeyPress "Right") = move east  w
+<pre><code class="haskell" data-trim>
+event(w, KeyPress "Up")    = move up    w
+event(w, KeyPress "Down")  = move down  w
+event(w, KeyPress "Left")  = move left  w
+event(w, KeyPress "Right") = move right w
 event(w, _) = w
 
 move :: Direction -> World -> World
-move d w@(World p@(x, y) (Grid _ _ _ ds)) = 
+move d w@(World p@(x, y) (Maze _ _ _ ds)) = 
   w { loc = if (containsDoor ds (p, p'))  then p' else p } 
     where p' = addDirToPoint p d
-```
+</code></pre>
 ---
 ## Drawing the world
-```haskell
-drawWorld w = scale (translate (pictures 
-  [drawBall (loc w), drawMaze (maze w)], -5, -5), 1.5, 1.5) where
-  drawBall (x,y) = translate (ball, x, y) 
+<pre><code class="haskell" data-trim>
+drawWorld :: World -> Picture
+drawWorld w = scale (translate (pictures
+  [drawBall $ loc w, drawMaze $ maze w], -10, -10), 0.98, 0.98) where
+  drawBall (x,y) = translate (ball, x, y)
   ball = translate (color (solidCircle 0.5, blue), 0.5, 0.5)
-```
+</code></pre>
 ---
 ## Drawing the maze
-```haskell
-drawMaze (Grid w h _ ds) = pictures [doorsPic, allGridLines] where
-  doorsPic = pictures (map (entrance : exit : ds, drawDoor))
-  entrance = ((-1,0), (0,0))
-  exit     = ((w-1,h-1), (w,h-1))
+<pre><code class="haskell" data-trim>
+drawMaze (Maze w h _ ds) = pictures [doorsPic, allGridLines] where
+  doorsPic = pictures [drawDoor d | d <- Set.toList ds]
   allGridLines = color (pictures [horizontalLines, verticalLines], black)
-  horizontalLines = pictures (map ([0..h], \y -> line [(w, y), (0, y)]))
-  verticalLines   = pictures (map ([0..w], \x -> line [(x, h), (x, 0)]))
-```
+  horizontalLines = pictures [line [(w, y), (0, y)] | y <- [0..h]]
+  verticalLines   = pictures [line [(x, h), (x, 0)] | x <- [0..w]]
+</code></pre>
 ---
 ## Drawing doors
-```haskell
+<pre><code class="haskell" data-trim>
 drawDoor :: Door -> Picture
-drawDoor (f, t) = color (thickLine (g f t, 0.1), white) where
- g (fx,fy) (tx,ty) 
-   | fy < ty = [(fx,  fy+1), (tx+1,ty)]   -- going up
-   | fy > ty = [(fx,  fy),   (tx+1,ty+1)] -- going down
-   | fx < tx = [(fx+1,fy),   (tx,  ty+1)] -- going right
-   | fx > tx = [(fx,  fy),   (tx+1,ty+1)] -- going left
-```
----
-## List shuffle
-```haskell
-shuffle :: [a] -> RandomSupply -> ([a], RandomSupply)
-shuffle xs randoms = (as, remainingRandoms) where
-  (rs, remainingRandoms) = splitAt (randoms, length xs)
-  z  = [ (r,x) | r <- rs | x <- xs ]
-  sortedRs = sort rs
-  f r acc = (maybe (lookup (z, r), id, error "impossible")) : acc
-  as = foldr f [] sortedRs
-```
----
-## Some Prelude functions
-```haskell
-foldl :: (b -> a -> b) -> b -> [a] -> b
-foldl f z0 xs0 = lgo z0 xs0 where
-  lgo z []     =  z
-  lgo z (x:xs) = lgo (f z x) xs
+drawDoor (from, to) = color (thickLine (g from to, 0.1), white) where
+  g (fx,fy) (tx,ty)
+  | fy < ty = [(fx,  fy+1), (tx+1,ty)  ] -- going up
+  | fy > ty = [(fx,  fy),   (tx+1,ty+1)] -- going down
+  | fx < tx = [(fx+1,fy),   (tx,  ty+1)] -- going right
+  | fx > tx = [(fx,  fy),   (tx+1,ty+1)] -- going left
+</code></pre>
 
-foldr :: (a -> b -> b) -> b -> [a] -> b
-foldr k z = go where
-  go []     = z
-  go (y:ys) = y `k` go ys
-```
 
                     </script>
                 </section>
@@ -193,6 +174,7 @@ foldr k z = go where
 		<script>
 
 			Reveal.initialize({
+maxScale: 3.0,
 				controls: true,
 				progress: true,
 				history: true,
