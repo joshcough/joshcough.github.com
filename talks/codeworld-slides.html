@@ -28,26 +28,185 @@
 ## CodeWorld.info Info.
 * Prelude: http://codeworld.info/doc/Prelude.html
 * Repo: https://github.com/google/codeworld
-* Created by Chris Smith
-  * Github: https://github.com/cdsmith
-  * Twitter: @cdsmithus
+* Created by Chris Smith: http://cdsmith.wordpress.com
+* API Based on Gloss: http://gloss.ouroborus.net/
 ---
 <section id="fragments">
-<h2>What is CodeWorld?</h2>
+<h2>Motivations / What is CodeWorld?</h2>
 <ul>
-  <li class="fragment">A system for teaching kids programming and math?</li>
-  <li class="fragment">A system for teaching Haskell?</li>
-  <li class="fragment">Best to just see.</li>
+  <li class="fragment">An API for building pictures, animations, and games.</li>
+  <li class="fragment">A tool for teaching kids programming and math.</li>
+  <li class="fragment">A tool for teaching Haskell?</li>
 </ul>
 ---
-## Maze Generator: Imports
+## Entry Points
+<pre><code class="haskell" data-trim>
+pictureOf     :: Picture -> Program
+
+animationOf   :: (Number -> Picture) -> Program
+
+simulationOf  :: ([Number]    -> a, (a, Number) -> a, a -> Picture) ->
+                 Program
+
+interactionOf :: ([Number]      -> a,
+                  (a, Number)   -> a,
+                  (a, Event)    -> a,
+                  a -> Picture) ->
+                 Program
+</code></pre>
+---
+## Entry Points
+<pre><code class="haskell" data-trim>
+pictureOf     :: Picture -> Program
+
+animationOf   :: (Time   -> Picture) -> Program
+
+simulationOf  :: ([RandomNum] -> a, (a,   Time) -> a, a -> Picture) ->
+                 Program
+
+interactionOf :: ([RandomNum]   -> a,
+                  (a, Time)     -> a,
+                  (a, Event)    -> a,
+                  a -> Picture) ->
+                 Program
+</code></pre>
+---
+## Pictures
+<pre><code class="haskell" data-trim>
+line      :: [Point] -> Picture
+rectangle :: (Number, Number) -> Picture
+circle    :: Number -> Picture
+
+translate :: (Picture, Number, Number) -> Picture
+scale     :: (Picture, Number, Number) -> Picture
+rotate    :: (Picture, Number) -> Picture
+
+text      :: Text -> Picture
+pictures  :: [Picture] -> Picture
+
+blank     :: Picture
+(&)       :: Picture -> Picture -> Picture 
+
+main = pictureOf(scale(translate (rectangle(1,1), 3, 3), 2, 2))
+</code></pre>
+---
+## Colors
+<pre><code class="haskell" data-trim>
+newtype Color = RGBA(Number, Number, Number, Number)
+
+black, white, red, green, blue, ... :: Color
+
+light, dark, bright, muted, translucent :: Color -> Color
+
+color :: (Picture, Color) -> Picture
+
+main = pictureOf (color (solidRectangle (5,5), bright red))
+</code></pre>
+---
+## Events
+<pre><code class="haskell" data-trim>
+data Event =
+    KeyPress      !Text
+  | KeyRelease    !Text
+  | MousePress    !(MouseButton, Point)
+  | MouseRelease  !(MouseButton, Point)
+  | MouseMovement !Point
+
+data MouseButton = LeftButton | MiddleButton | RightButton
+</code></pre>
+<p>Examples:</p>
+<pre><code class="haskell" data-trim>
+KeyPress   "Up"
+KeyRelease "Enter"
+MousePress (LeftButton (5,7))
+...
+</code></pre>
+---
+# DEMO
+---
+<h2>Talking Point</h2>
+<p>We saw that functions in CodeWorld are uncurried.</p>
+<p class="fragment">And have their arguments reversed.</p>
+<p class="fragment">It doesn't have to be this way.</p>
+---
+## Programs
+<pre><code class="haskell" data-trim>
+type Program = IO ()
+
+main :: IO ()
+main = ...
+</code></pre>
+---
+## Programs
+<pre><code class="haskell" data-trim>
+type Program = IO ()
+
+main :: IO ()
+main = ???
+</code></pre>
+---
+## Programs
+<pre><code class="haskell" data-trim>
+type Program = IO ()
+
+main :: IO ()
+main = codeWorldEntryPoint ???
+</code></pre>
+---
+## Programs
+<pre><code class="haskell" data-trim>
+type Program = IO ()
+
+main :: IO ()
+main = nope!
+</code></pre>
+---
+## Imports!
 <pre><code class="haskell" data-trim>
 {-# LANGUAGE NoImplicitPrelude #-}
 import HaskellPrelude
 import CodeWorld
 import Data.Set (Set)
 import qualified Data.Set as Set
+
+main = anything haskell code you want!
 </code></pre>
+---
+## Write Anything!
+<pre><code class="haskell" data-trim>
+{-# LANGUAGE NoImplicitPrelude #-}
+import HaskellPrelude
+
+main =
+  putStrLn "hello world" >> putStrLn "goodbye world"
+</code></pre>
+---
+## Typeclasses
+<pre><code class="haskell" data-trim>
+class Monoid a where
+  mempty  :: a
+  mappend :: a -> a -> a
+
+instance Monoid Picture where
+  mempty  = blank
+  mappend = (&)
+
+main = pictureOf (mappend mempty (circle 1))
+</code></pre>
+---
+## Debugging
+<pre><code class="haskell" data-trim>
+{-# LANGUAGE NoImplicitPrelude #-}
+import HaskellPrelude
+import CodeWorld   as CW
+import Debug.Trace as DT
+
+main = pictureOf (
+  DT.trace "hello javascript console!" $
+    CW.trace (text "hello run area!", "hello output area!"))
+</code></pre>
+---
+# Demo: Maze Generator
 ---
 ## Maze Generator: interationOf
 <pre><code class="haskell" data-trim>
@@ -87,10 +246,8 @@ data Maze = Maze {
   visited :: Set Point, doors  :: Set Door }
 
 emptyMaze w h =
-  Maze w h Set.empty (Set.fromList $ entranceDoor : exitDoor : [])
-  where
-    entranceDoor   = ((-1,0), (0,0))
-    exitDoor       = ((w-1,h-1), (w,h-1))
+  Maze w h Set.empty (Set.fromList [entrance, exit])
+  where entrance = ((-1,0), (0,0)); exit = ((w-1,h-1), (w,h-1))
 </code></pre>
 ---
 ## Maze Operations
@@ -175,6 +332,18 @@ drawDoor (from, to) = color (thickLine (g from to, 0.1), white) where
   | fx < tx = [(fx+1,fy),   (tx,  ty+1)] -- going right
   | fx > tx = [(fx,  fy),   (tx+1,ty+1)] -- going left
 </code></pre>
+---
+## Future of CodeWorld
+* [Proposals (on Github)](https://github.com/google/codeworld/issues?q=is:open+is:issue+label:proposal)
+  * Documentation, Web Redesign
+  * Modules, Sound, Debugger
+  * ...
+* Ideas, please? For teaching Haskell and Maths
+  * Language levels (like Racket)
+  * Projects for students to finish
+  * ???
+---
+# Questions?
 
 
                     </script>
@@ -189,12 +358,12 @@ drawDoor (from, to) = color (thickLine (g from to, 0.1), white) where
 		<script>
 
 			Reveal.initialize({
-maxScale: 3.0,
+        maxScale: 3.0,
 				controls: true,
 				progress: true,
 				history: true,
 				center: true,
-
+        transition: 'none',
 				// Optional libraries used to extend on reveal.js
 				dependencies: [
 					{ src: '../reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
