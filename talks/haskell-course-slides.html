@@ -42,11 +42,20 @@
 
 			<div class="slides">
 				<section>
-					<h1>Haskell & Functional Programming</h1>
+                    <h2>Haskell & </h2>
+					<h2>Functional Programming</h2>
 					<p>
-                       <small><a href="http://github.com/joshcough">Josh Cough</a> / <a href="http://twitter.com/joshcough">@joshcough</a></small>
+                       <small>Josh Cough</small>
 					</p>
+                    <p>
+                        <small><a href="https://github.com/joshcough/HaskellCourse">https://github.com/joshcough/HaskellCourse</a></small>
+                    </p>
 				</section>
+
+                <section>
+                    <h2>Important note:</h2>
+                    <h2>Ask questions!</h2>
+                </section>
 
 				<section>
 					<h2>Prerequisites</h2>
@@ -102,44 +111,33 @@ $ cabal install cabal-install
 </code></pre>					
 				</section>
 
-				<section>
-                	<h2>Clone and run the course repo</h2>
-<pre>
-<code data-trim>
-$ git clone https://github.com/joshcough/HaskellCourse.git
-
-$ cd HaskellCourse
-
-$ cabal sandbox init
-
-$ cabal build
-</code></pre>
-                    <h4>Please raise your hand it this doesn't work</h4>
-
-				</section>
-
                 <section>
                     <h2>Read this sometime soon</h2>
                     <a href="learnyouahaskell.com"><img src="http://nostarch.com/sites/default/files/imagecache/product_full/lyah.png" width="350"/></a>
                 </section>
 
                 <section>
-                	<h2>Haskell Base Library</h2>
-                	<ul>
-                		<li>
-                			<a href="http://hackage.haskell.org/package/base-4.7.0.2">http://hackage.haskell.org/package/base-4.7.0.2</a>
-                		</li>
-                	</ul>
-                	<br/><br/><br/>
-	                <h2>Haskell Library Searches</h2>
-	                <ul>
-	                  <li><a href="www.haskell.org/hoogle/">http://www.haskell.org/hoogle/</a></li>
-	                  <li><a href="http://hayoo.fh-wedel.de/">http://hayoo.fh-wedel.de/</a></li>
-	              	</ul>
-				</section>
+                    <h3>Things you need in order to learn a new language</h3>
+                    <ul>
+                        <li class="fragment">Learn the language</li>
+                        <li class="fragment">Learn the libraries</li>
+                        <li class="fragment">Learn the tools</li>
+                        <li class="fragment">Something to build!</li>
+                    </ul>
+                </section>
 
                 <section>
-                    <h1>ghci</h1>
+                    <h1>The Language</h1>
+                </section>
+
+                <section>
+                    <h2>ghci*</h2>
+<pre><code data-trim>
+$ ghci
+
+Prelude>
+</code></pre>
+<small>*Techically a tool, but you need it.</small>
                 </section>
 
 				<section>
@@ -181,24 +179,14 @@ Prelude> :t (++)
                 <section>
                 	<h2>Other helpful ghci stuff</h2>
 <pre><code data-trim>
-Prelude> :help
+*Prelude> :info id
+id :: a -> a    -- Defined in ‘GHC.Base’
+
+*Prelude> :help
 ... lots of stuff ...
-
-*ghci> :info id
-id :: a -> a 	-- Defined in ‘GHC.Base’
-
-Prelude> 5 + 5 -- you can use comments
-10
-
-Prelude> -- run shell commands with :!
-Prelude> :! git status
-...
-
-Prelude> -- edit files
-Prelude> :edit src/HaskellCourse/Lang1/AST.hs
 </code></pre>                	
                 </section>
-
+<!--
                 <section>
                 	<h2>Saving Default GHCI Options</h2>
 <pre><code data-trim>
@@ -211,13 +199,10 @@ $ ghci
 *ghci> alright! 
 </code></pre>                	
                 </section>
+-->
 
                 <section>
-                    <h1>Haskell intro</h1>
-                </section>
-
-                <section>
-                    <h1>Built in Data Types</h1>
+                    <h2>Built in Data Types</h2>
                 </section>
 
                 <section>
@@ -492,6 +477,7 @@ Right 5
 						We'll also come back to this.
                 </section>   
 
+<!--
                 <section><h1>Creating Data and Functions</h1></section>
 
                 <section>
@@ -548,26 +534,78 @@ shouldHitGas Red    = False
 shouldHitGas Green  = True
 shouldHitGas Yellow = True
 </code></pre>                   
-				</section>
-                <section><h1>Cabal intro</h1></section>
+				</section> -->
+                <section><h1>Libraries</h1></section>
+
+                <section>
+                    <h2>Haskell Base Library</h2>
+                    <a href="http://hackage.haskell.org/package/base-4.7.0.2">http://hackage.haskell.org/package/base-4.7.0.2</a>
+                </section>
+
+
+                <section>
+                    <h2>Library Searches</h2>
+                    <ul>
+                        <li>
+                            Hayoo: <a href="http://hackage.haskell.org/package/base-4.7.0.2">hayoo.fh-wedel.de</a>
+                        </li>
+                        <li>Hoogle: <a href="https://www.haskell.org/hoogle/">https://www.haskell.org/hoogle</a>
+                    </ul>
+                </section>
+
+                <section><h1>Tools</h1></section>
+
+                <section>
+                    <h2>Cabal: Haskell build system</h2>
+                    <ul>
+                        <li class="fragment">Configure sources</li>
+                        <li class="fragment">Build libraries</li>
+                        <li class="fragment">Run tests</li>
+                        <li class="fragment">Build executables</li>
+                        <li class="fragment">... basically everything ...</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Clone and build the course repo</h2>
+<pre>
+<code data-trim>
+$ git clone https://github.com/joshcough/HaskellCourse.git
+
+$ cd HaskellCourse
+
+$ cabal sandbox init
+
+$ cabal install --enable-tests --only-dependencies
+
+$ cabal build
+</code></pre>
+                    <h4>*Please raise your hand it this doesn't work!!*</h4>
+
+                </section>
+
+                <section>
+                    <h2>Let's take a peek</h2>
+<pre><code data-trim>
+$ cat haskell-course.cabal 
+</code></pre>                    
+                </section>
 
                 <section>
                 	<h2>cabal repl</h2>
 <pre><code data-trim>
 $ cabal repl          
 
-* HaskellCourse.Lang1.AST> :import HaskellCourse.Lang1.Interp
+* HaskellCourse.AE.AE> :t runAE 
+runAE :: String -> Int
 
-* HaskellCourse.Lang1.AST HaskellCourse.Lang1.Interp> :t interp
-interp
-  :: E
-     -> HaskellCourse.Lang1.Interp.Env
-     -> HaskellCourse.Lang1.Interp.Runtime
+* HaskellCourse.AE.AE> runAE "(+ 5 6)"
+11
 
 *> ^d
 </code></pre>
                 </section>
-
+<!--
                 <section>
                 	<h2>cabal repl - long prompts</h2>
 <pre><code data-trim>
@@ -587,29 +625,11 @@ import HaskellCourse.Util
 :module +*HaskellCourse.Lang1.AST -- added automatically
 </code></pre>
                 </section>
-
+-->
 				<section>
 					<h2>Questions?</h2>
-                                        <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcShF9wptFfirVWcEtXRmI6MUM5XtNK_KDeMOEkbCirgPNmpYqEKdA" width="250"/>
+                    <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcShF9wptFfirVWcEtXRmI6MUM5XtNK_KDeMOEkbCirgPNmpYqEKdA" width="250"/>
 				</section>
-
-				<section data-markdown>
-					<script type="text/template">
-						## Markdown support
-
-						For those of you who like that sort of thing. Instructions and a bit more info available [here](https://github.com/hakimel/reveal.js#markdown).
-
-						```
-						<section data-markdown>
-						  ## Markdown support
-
-						  For those of you who like that sort of thing.
-						  Instructions and a bit more info available [here](https://github.com/hakimel/reveal.js#markdown).
-						</section>
-						```
-					</script>
-				</section>
-
 
 			</div>
 
